@@ -12,10 +12,12 @@ function indent() {
 
 # Expand cache
 if [ -d "$2" ]; then
+  echo "=====> Found cache $2"
+  ls -la $2
   if [ -d "$2/bundle" ]; then
     echo "=====> Restoring cache from $2"
     mkdir -p $1/vendor/bundle
-    cp -rv $2/bundle $1/vendor/bundle
+    cp -rv $2/bundle $1/vendor/
   fi
 else
   echo "=====> Creating cache directory $2"
@@ -84,7 +86,7 @@ if [ -d "$1/vendor/bundle" ]; then
   echo "=====> Saving bundler cache"
   rm -rf $2/bundle
   mkdir -p $2/bundle
-  cp -rv $1/vendor/bundle $2/bundle
+  cp -rv $1/vendor/bundle $2/
 fi
 
 if [ -e $1/last_pack_release.out ]; then
