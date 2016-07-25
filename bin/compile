@@ -10,6 +10,18 @@ function indent() {
   esac
 }
 
+# Expand cache
+if [ -d "$2" ]; then
+  if [ -d "$2/bundle" ]; then
+    echo "=====> Restoring cache from $2"
+    mkdir -p $1/vendor/bundle
+    cp -rv $2/bundle $1/vendor/bundle
+  fi
+else
+  echo "=====> Creating cache directory $2"
+  mkdir -p $2
+fi
+
 unset GIT_DIR
 
 for BUILDPACK in $(cat $1/.buildpacks); do
@@ -66,6 +78,13 @@ for BUILDPACK in $(cat $1/.buildpacks); do
     fi
   fi
 done
+
+# Save the cache
+if [ -d "$1/vendor/bundle" ]; then
+  echo "=====> Saving bundler cache"
+  mkdir -p $2/bundle
+  cp -rv $1/vendor/bundle $2/bundle
+fi
 
 if [ -e $1/last_pack_release.out ]; then
   echo "Using release configuration from last framework ($framework)."
